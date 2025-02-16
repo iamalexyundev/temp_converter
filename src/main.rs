@@ -43,11 +43,11 @@ fn get_user_input() -> String {
 
 fn convert(temperature: f64, symbol: &str) -> (f64, &str) {
     match symbol {
-        "F" => return ((temperature - 32.0) * 5.0 / 9.0, "C"),
-        "C" => return (temperature * (9.0 / 5.0) + 32.0, "F"),
+        "F" => ((temperature - 32.0) * 5.0 / 9.0, "C"),
+        "C" => (temperature * (9.0 / 5.0) + 32.0, "F"),
         _ => {
             println!("Something went wrong!");
-            return (0.0, "Error");
+            (temperature, symbol)
         }
-    };
+    }
 }
