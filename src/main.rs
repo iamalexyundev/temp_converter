@@ -45,9 +45,6 @@ fn convert(temperature: f64, symbol: &str) -> (f64, &str) {
     match symbol {
         "F" => ((temperature - 32.0) * 5.0 / 9.0, "C"),
         "C" => (temperature * (9.0 / 5.0) + 32.0, "F"),
-        _ => {
-            println!("Something went wrong!");
-            (temperature, symbol)
-        }
+        _ => unreachable!(),
     }
 }
