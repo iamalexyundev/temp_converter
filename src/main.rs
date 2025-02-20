@@ -1,9 +1,34 @@
 use std::io;
+#[derive(Debug)]
+enum Temperature {
+    Celsius(f64),
+    Fahrenheit(f64),
+}
+impl Temperature {
+    fn symbol(&self) -> char {
+        match self {
+            Temperature::Celsius(_) => 'C',
+            Temperature::Fahrenheit(_) => 'F',
+        }
+    }
+    fn value(&self) -> f64 {
+        match self {
+            Temperature::Celsius(val) => *val,
+            Temperature::Fahrenheit(val) => *val,
+        }
+    }
+    fn convert(&self) -> Self {
+        match self {
+            Temperature::Celsius(val) => Temperature::Fahrenheit(*val * (9.0 / 5.0) + 32.0),
+            Temperature::Fahrenheit(val) => Temperature::Celsius((*val - 32.0) * 5.0 / 9.0),
+        }
+    }
+}
 fn main() {
     println!("Welcome to Temperature converter!");
     println!("Please input the temperature you want to convert from:");
 
-    let temperature: f64 = loop {
+    let temperature_input: f64 = loop {
         match get_user_input().trim().parse() {
             Ok(temp) => break temp,
             Err(_) => println!("Invalid input! Please enter a number!"),
@@ -12,25 +37,29 @@ fn main() {
 
     println!("Please input the unit you want to convert from:");
 
-    let unit = loop {
+    let temperature: Temperature = loop {
         match get_user_input().trim().to_lowercase().as_str() {
             "f" => {
-                println!("Converting {temperature} from F to C");
-                break "F";
+                break Temperature::Fahrenheit(temperature_input);
             }
             "c" => {
-                println!("Converting {temperature} from C to F");
-                break "C";
+                break Temperature::Celsius(temperature_input);
             }
             _ => println!("Invalid input! Please enter 'C' or 'F'."),
         }
     };
-    println!("You entered: {:.2}°{}", temperature, unit);
-    let converted = convert(temperature, unit);
     println!(
-        "{temperature:.2}°{unit} is {:.2}°{}",
-        converted.0, converted.1
-    )
+        "You entered: {:.2}°{}",
+        temperature.value(),
+        temperature.symbol()
+    );
+    let converted = temperature.convert();
+    println!("Converted: {:.2}°{}", converted.value(), converted.symbol())
+    // let converted = convert(temperature, &unit);
+    // println!(
+    //     "{:.2}°{:?} is {:.2}°{:?}",
+    //     temperature, &unit, converted.0, converted.1
+    // )
 }
 
 fn get_user_input() -> String {
@@ -41,10 +70,9 @@ fn get_user_input() -> String {
     user_input
 }
 
-fn convert(temperature: f64, symbol: &str) -> (f64, &str) {
-    match symbol {
-        "F" => ((temperature - 32.0) * 5.0 / 9.0, "C"),
-        "C" => (temperature * (9.0 / 5.0) + 32.0, "F"),
-        _ => unreachable!(),
-    }
-}
+// fn convert(temperature: f64, symbol: &Temperature) -> (f64, Temperature) {
+//     match symbol {
+//         Temperature::F(temp) => ((temp - 32.0) * 5.0 / 9.0, Temperature::C),
+//         Temperature::C(temp) => (temp * (9.0 / 5.0) + 32.0, Temperature::F),
+//     }
+// }
