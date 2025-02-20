@@ -55,11 +55,6 @@ fn main() {
     );
     let converted = temperature.convert();
     println!("Converted: {:.2}°{}", converted.value(), converted.symbol())
-    // let converted = convert(temperature, &unit);
-    // println!(
-    //     "{:.2}°{:?} is {:.2}°{:?}",
-    //     temperature, &unit, converted.0, converted.1
-    // )
 }
 
 fn get_user_input() -> String {
@@ -69,10 +64,3 @@ fn get_user_input() -> String {
         .expect("Failed to read input");
     user_input
 }
-
-// fn convert(temperature: f64, symbol: &Temperature) -> (f64, Temperature) {
-//     match symbol {
-//         Temperature::F(temp) => ((temp - 32.0) * 5.0 / 9.0, Temperature::C),
-//         Temperature::C(temp) => (temp * (9.0 / 5.0) + 32.0, Temperature::F),
-//     }
-// }
